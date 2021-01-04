@@ -108,8 +108,11 @@ class App extends React.Component {
 
     this.setTaskData()
     this.setLinkData()
+
+    let currentScrollState = gantt.getScrollState().x
     gantt.clearAll()
     gantt.parse(data)
+    gantt.scrollTo(currentScrollState, null)
   }
 
   setTaskData() {
