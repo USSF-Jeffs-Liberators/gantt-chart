@@ -43,8 +43,6 @@ class App extends React.Component {
 
     gantt.attachEvent("onAfterTaskUpdate", async (id,item) => {
 
-      alert(id)
-
       var taskData = {}
       taskData.assigned_to = this.getUserID(item.resource)
       taskData.task_name = item.text
