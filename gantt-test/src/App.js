@@ -38,9 +38,12 @@ class App extends React.Component {
         },
         body: JSON.stringify(taskData)
       })
+      this.fetchData()
     })
 
     gantt.attachEvent("onAfterTaskUpdate", async (id,item) => {
+
+      alert(id)
 
       var taskData = {}
       taskData.assigned_to = this.getUserID(item.resource)
@@ -56,12 +59,14 @@ class App extends React.Component {
         },
         body: JSON.stringify(taskData)
       })
+      this.fetchData()
     })
 
     gantt.attachEvent("onAfterTaskDelete", async (id,item) => {
       await fetch(`http://localhost:3001/tasks/${id}`, {
         method: "DELETE"
       })
+      this.fetchData()
     })
 
     gantt.attachEvent("onAfterLinkAdd", async (id,item) => {
@@ -78,14 +83,19 @@ class App extends React.Component {
         },
         body: JSON.stringify(linkData)
       })
+      this.fetchData()
     })
 
     gantt.attachEvent("onAfterLinkDelete", async (id,item) => {
       await fetch(`http://localhost:3001/dependencies/${id}`, {
         method: "DELETE"
       })
+      this.fetchData()
     })
+    this.fetchData()
+  }
 
+  async fetchData() {
     const response1 = await fetch(`http://localhost:3001/tasks/${this.state.project_id}`)
     const json1 = await response1.json()
     this.setState({tasks:json1})
@@ -100,6 +110,8 @@ class App extends React.Component {
 
     this.setTaskData()
     this.setLinkData()
+    gantt.clearAll()
+    gantt.parse(data)
   }
 
   setTaskData() {
